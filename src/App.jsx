@@ -9,8 +9,16 @@ import { WinnerModal } from './components/WinnerModal';
 
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null))
-  const [turn, setTurn] = useState(TURNS.x)
+  const [board, setBoard] = useState(()=> {
+    const boardFromStorage = window.localStorage.getItem('board')
+    if(boardFromStorage) return JSON.parse(boardFromStorage)
+    return Array(9).fill(null)
+  })
+  const [turn, setTurn] = useState(()=>{
+    const turnFromStorage = window.localStorage.getItem('turn')
+    return turnFromStorage ?? TURNS.x
+  })
+
   const [winner, setWinner] = useState(null)
 
   
@@ -19,18 +27,21 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.x)
     setWinner(null)
+    window.localStorage.removeItem('turn')
+    window.localStorage.removeItem('board')
+
   }
 
 
   const updateBoard = (index)=> {
     if(board[index] || winner) return
-
     const newBoard = [...board]
     newBoard[index] = turn
     setBoard(newBoard)
     const newTurn = turn === TURNS.x? TURNS.o:TURNS.x
     setTurn(newTurn)
-    console.log(board)
+    window.localStorage.setItem('board', JSON.stringify(newBoard))
+    window.localStorage.setItem('turn', newTurn)
     const newWinner = checkWinner(newBoard)
     if(newWinner){
       confetti()
