@@ -8,7 +8,7 @@ const TURNS = {
 
 
 const Square = ({children, updateBoard, index, isSelected})=>{
-  const className = `square ${isSelected? 'is-selected': ''}`
+  const className = `square${isSelected? ' is-selected': ''}`
 
   return(
     <div className={className}>
@@ -37,9 +37,12 @@ function App() {
 
       </section>
       <section className='turn'>
-        <Square isSelected={isSelected === turn.x}>{TURNS.X}</Square>
-        <Square isSelected={isSelected === turn.O}>{TURNS.o}</Square>
-
+          <Square isSelected={turn === TURNS.x}>
+            {TURNS.x}
+          </Square>
+          <Square isSelected={turn === TURNS.o}>
+            {TURNS.o}
+          </Square>
       </section>
     </main>
   );
